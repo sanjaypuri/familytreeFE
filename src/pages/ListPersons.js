@@ -73,8 +73,9 @@ export default function ListPersons() {
     }
   };
 
-  const showPerson  = (id) => {
+  const showPerson  = (id, person) => {
     sessionStorage.setItem("ftbyspid", id);
+    sessionStorage.setItem("ftbyspperson", person);
     navigate('/relations');
   };
 
@@ -108,7 +109,7 @@ export default function ListPersons() {
                 <td>{!person.dob ? "" : toDateString(person.dob)}</td>
                 <td>{!person.dom ? "" : toDateString(person.dom)}</td>
                 <td>{!person.dod ? "" : toDateString(person.dod)}</td>
-                <td><button className="btn btn-sm btn-outline-warning" onClick={() => {showPerson(person.id)}}>Add/Modify</button></td>
+                <td><button className="btn btn-sm btn-outline-warning" onClick={() => {showPerson(person.id, person.name)}}>Add/Modify</button></td>
               </tr>
             ))}
           </tbody>
