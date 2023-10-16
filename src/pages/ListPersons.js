@@ -75,7 +75,7 @@ export default function ListPersons() {
 
   const showPerson  = (id, person) => {
     sessionStorage.setItem("ftbyspid", id);
-    sessionStorage.setItem("ftbyspperson", person);
+    sessionStorage.setItem("ftbyspperson", person); 
     navigate('/relations');
   };
 
