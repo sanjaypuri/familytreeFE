@@ -87,7 +87,7 @@ export default function ListPersons() {
         </div>
       </div>
       <div className="row">
-        <span className="col-3 text-warning fs-2">
+        <span className="col-3 text-warning fs-2" style={{marginRight:'auto'}}>
           <input className="form-control" type="text" id="myInput" onKeyUp={filterList} placeholder="Search for names.."/>
         </span>
       </div>
