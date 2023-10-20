@@ -1,0 +1,86 @@
+
+.myrow{
+  display: flex;
+  justify-content: center;
+  align-items: top;
+}
+
+.mycard{
+  border: 1px solid hsla(0, 0%, 85%, 1);
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px gray;
+  width: 200px;
+  background-color: hsla(53, 100%, 90%, 1);
+}
+
+.mycardTitle{
+  /* background-color: black;
+  color: white; */
+  padding:5px 10px;
+  font-size: 0.85rem;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.mycardContent{
+  padding:5px 10px;
+  font-size: 1.1rem;
+  background-color: hsla(53, 100%, 90%, 1);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  cursor: pointer;
+}
+
+.myhorizontal{
+  width:100px;
+  height:0px;
+  border: 2px solid hsla(0, 0%, 85%, 1);
+}
+
+.myhorizontalLong{
+  width:300px;
+  height:0px;
+  border: 2px solid hsla(0, 0%, 85%, 1);
+}
+
+.myhorizontalLonger{
+  width:400px;
+  height:0px;
+  border: 2px solid hsla(0, 0%, 85%, 1);
+}
+
+.myverticalRight{
+  border: none;
+  border-right: 3px solid hsla(0, 0%, 85%, 1);
+  width: 100px;
+  height:25px;
+}
+
+.myverticalLeft{
+  border: none;
+  border-left: 3px solid hsla(0, 0%, 85%, 1);
+  width: 100px;
+  height:25px;
+}
+
+.myverticalMiddle{
+  border: 2px solid hsla(0, 0%, 85%, 1);
+  width: 0px;
+  height:25px;
+}
+
+.myblank{
+  width:100px;
+  height:0px;
+}
+
+.mycardBlank{
+  border: 2px solid hsla(0, 0%, 85%, 1);
+  border-radius: 10px;
+  width: 0px;
+}
+
+.myblankLong{
+  width:300px;
+  height:0px;
+}

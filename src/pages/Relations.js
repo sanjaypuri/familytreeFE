@@ -26,7 +26,7 @@ export default function Relations() {
   //   { value: 'strawberry', label: 'Strawberry' },
   //   { value: 'vanilla', label: 'Vanilla' }
   // ]
-  
+
   const token = sessionStorage.getItem("ftbysptoken")
   const baseHeaders = {
     headers: {
@@ -73,7 +73,7 @@ export default function Relations() {
           toast.error("Server Error");
         };
       });
-      res = await axios.get(`http://localhost:5000/api/list`, baseHeaders)
+    res = await axios.get(`http://localhost:5000/api/list`, baseHeaders)
       .then(res => {
         if (!res.data.success) {
           toast.error(res.data.error);
@@ -147,14 +147,30 @@ export default function Relations() {
   };
 
   const handleRelations = () => {
-    alert("relationid:"+relation[0])
-    toast.success("Record Saved");
-    if (toggle) {
-      setToggle(0);
-    } else {
-      setToggle(1);
-    };
-    closeModal01();
+    // alert("relationid:" + relation[0]);
+    // alert("relation:" + selected.value);
+    // alert("personid:" + id)
+    axios.post("http://localhost:5000/api/newrelation", {
+      relationid: relation[0],
+      relation: selected.value,
+      relationof: id,
+    }, baseHeaders)
+      .then(res => {
+        if (res.data.success) {
+          toast.success(res.data.message);
+          closeModal01();
+          if (toggle) {
+            setToggle(0);
+          } else {
+            setToggle(1);
+          };
+        } else {
+          toast.error(res.data.error);
+        };
+      })
+      .catch(err => {
+        toast.error(err);
+      })
   };
 
   return (
@@ -169,7 +185,7 @@ export default function Relations() {
             {spouse[0] ? (
               <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(spouse[0]) }}>Remove</button>
             ) : (
-              <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }}>add</button>
+              <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(3) }}>add</button>
             )}
           </div>
         </div>
@@ -184,7 +200,7 @@ export default function Relations() {
                 {father[0] ? (
                   <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(father[0]) }}>Remove</button>
                 ) : (
-                  <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }}>add</button>
+                  <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(1) }}>add</button>
                 )}
               </div>
             </div>
@@ -196,7 +212,7 @@ export default function Relations() {
                 {mother[0] ? (
                   <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(mother[0]) }}>Remove</button>
                 ) : (
-                  <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }}>add</button>
+                  <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(2) }}>add</button>
                 )}
               </div>
             </div>
@@ -219,7 +235,7 @@ export default function Relations() {
                 </table>
               </div>
               <div className="cardFooter">
-                <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }}>add</button>
+                <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(4) }}>add</button>
               </div>
             </div>
             {/* /////////////DAUGHTER CARD//////////////////// */}
@@ -238,7 +254,7 @@ export default function Relations() {
                 </table>
               </div>
               <div className="cardFooter">
-                <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }}>add</button>
+                <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(5) }}>add</button>
               </div>
             </div>
           </div>
@@ -279,7 +295,7 @@ export default function Relations() {
                 </table>
               </div>
               <div className="cardFooter">
-                <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }}>add</button>
+                <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(7) }}>add</button>
               </div>
             </div>
           </div>
@@ -292,11 +308,11 @@ export default function Relations() {
                 <div className="col-12 text-warning fs-4 mb-3">Adding {relation[1]}</div>
                 <div className="col-12 text-bg-dark fs-5">Select Name</div>
                 <div className="col-12">
-                <Select
-                      options={options}
-                      onChange={selectUpdate}
-                      style={{fontSize:'0.6rem'}}
-                />
+                  <Select
+                    options={options}
+                    onChange={selectUpdate}
+                    style={{ fontSize: '0.6rem' }}
+                  />
                 </div>
                 <div className="row mt-4">
                   <button className="col-4 btn btn-sm btn-outline-warning" style={{ fontSize: "0.8rem" }} onClick={handleRelations}>Save</button>

@@ -32,13 +32,11 @@ export default function Navbar() {
                   <ul className="dropdown-menu">
                     <li><Link to="/newperson" className="dropdown-item">Add a new Person</Link></li>
                     <li><Link to="/listpersons" className="dropdown-item">List all Persons</Link></li>
-                    {/* <li><hr class="dropdown-divider"/></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li> */}
                   </ul>
                 </li>
-                {/* <li className="nav-item">
-                  <Link to="activity" className="nav-link" aria-current="page">Activity</Link>
-                </li> */}
+                <li className="nav-item">
+                  <Link to="tree" className="nav-link" aria-current="page">View Family Tree</Link>
+                </li>
               </ul>
             </>
           ) : (

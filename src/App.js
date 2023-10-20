@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NewPerson from './pages/NewPerson';
 import ListPersons from './pages/ListPersons';
 import Relations from './pages/Relations';
+import Tree from './pages/Tree';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/newperson" element={<NewPerson />} />
             <Route path="/listpersons" element={<ListPersons />} />
             <Route path="/relations" element={<Relations />} />
+            <Route path="/tree" element={<Tree />} />
           </Routes>
         </div>
       </div>
