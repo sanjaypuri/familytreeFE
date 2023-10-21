@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import './Relations.css';
 
 export default function Relations() {
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [father, setFather] = useState([]);
   const [mother, setMother] = useState([]);
@@ -27,7 +27,7 @@ export default function Relations() {
   //   { value: 'vanilla', label: 'Vanilla' }
   // ]
 
-  const token = sessionStorage.getItem("ftbysptoken")
+  const token = sessionStorage.getItem("ftbysptoken");
   const baseHeaders = {
     headers: {
       'token': token
@@ -35,13 +35,14 @@ export default function Relations() {
   }
   const id = sessionStorage.getItem("ftbyspid");
   const person = sessionStorage.getItem("ftbyspperson");
+  const gender = sessionStorage.getItem("ftbyspgender");
 
-  const styles = {
-    btnStyle: {
-      width: '65px',
-      height: '36px'
-    }
-  };
+  // const styles = {
+  //   btnStyle: {
+  //     width: '65px',
+  //     height: '36px'
+  //   }
+  // };
 
   useEffect(() => {
     if (!token) {
@@ -51,7 +52,7 @@ export default function Relations() {
   }, [toggle]);
 
   async function load() {
-    let res = await axios.get(`http://localhost:5000/api/relations/${id}`, baseHeaders)
+    await axios.get(`http://localhost:5000/api/relations/${id}`, baseHeaders)
       .then(res => {
         if (!res.data.success) {
           toast.error(res.data.error);
@@ -73,7 +74,7 @@ export default function Relations() {
           toast.error("Server Error");
         };
       });
-    res = await axios.get(`http://localhost:5000/api/list`, baseHeaders)
+    await axios.get(`http://localhost:5000/api/list`, baseHeaders)
       .then(res => {
         if (!res.data.success) {
           toast.error(res.data.error);
@@ -92,18 +93,99 @@ export default function Relations() {
 
   };
 
-  const removeRelation = (recno) => {
-    axios.delete(`http://localhost:5000/api/relation/${recno}`, baseHeaders)
+  const removeRelation = (relid, relofid, gender) => {
+    let id;
+    let relid2, rel2, relofid2;
+    axios.post('http://localhost:5000/api/getid', {
+      relationid: relid,
+      relationof: relofid
+    }, baseHeaders)
       .then(res => {
         if (res.data.success) {
-          toast.success(res.data.message);
-          if (toggle) {
-            setToggle(0);
+          id = res.data.id;
+        }
+      })
+      .catch(err => {
+        toast.error(err);
+      });
+    axios.delete(`http://localhost:5000/api/delrelations`, {
+      relationid: relid,
+      relationof: relofid
+    }, baseHeaders)
+      .then(res => {
+        if (res.data.success) {
+          if (gender === "Male") {
+            switch (relid) {
+              case 1:
+              case 2:
+                relid2 = 4;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+              case 3:
+                relid2 = 3;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+              case 4:
+              case 5:
+                relid2 = 1;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+              case 6:
+              case 7:
+                relid2 = 6;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+            }
           } else {
-            setToggle(1);
+            switch (relid) {
+              case 1:
+              case 2:
+                relid2 = 5;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+              case 3:
+                relid2 = 3;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+              case 4:
+              case 5:
+                relid2 = 2;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+              case 6:
+              case 7:
+                relid2 = 7;
+                rel2 = relofid
+                relofid2 = id;
+                break;
+            }
           };
         } else {
           toast.error(res.data.error);
+        };
+      })
+      .catch(err => {
+        toast.error(err);
+      });
+    console.log(baseHeaders);
+    axios.delete(`http://localhost:5000/api/delrelations2`, {
+      relationid: relid2,
+      relation: rel2,
+      relationof: relofid2
+    }, baseHeaders)
+      .then(res => {
+        toast.success(res.data.message);
+        if (toggle) {
+          setToggle(0);
+        } else {
+          setToggle(1);
         };
       })
       .catch(err => {
@@ -147,9 +229,7 @@ export default function Relations() {
   };
 
   const handleRelations = () => {
-    // alert("relationid:" + relation[0]);
-    // alert("relation:" + selected.value);
-    // alert("personid:" + id)
+    let newrelid, newrel, newrelof;
     axios.post("http://localhost:5000/api/newrelation", {
       relationid: relation[0],
       relation: selected.value,
@@ -157,13 +237,81 @@ export default function Relations() {
     }, baseHeaders)
       .then(res => {
         if (res.data.success) {
-          toast.success(res.data.message);
-          closeModal01();
-          if (toggle) {
-            setToggle(0);
+          if (gender === "Male") {
+            switch (relation[0]) {
+              case 1:
+              case 2:
+                newrelid = 4;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+              case 3:
+                newrelid = 3;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+              case 4:
+              case 5:
+                newrelid = 1;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+              case 6:
+              case 7:
+                newrelid = 6;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+            }
           } else {
-            setToggle(1);
-          };
+            switch (relation[0]) {
+              case 1:
+              case 2:
+                newrelid = 5;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+              case 3:
+                newrelid = 3;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+              case 4:
+              case 5:
+                newrelid = 2;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+              case 6:
+              case 7:
+                newrelid = 7;
+                newrel = id;
+                newrelof = selected.value;
+                break;
+            }
+          }
+          // };
+          axios.post("http://localhost:5000/api/newrelation", {
+            relationid: newrelid,
+            relation: newrel,
+            relationof: newrelof,
+          }, baseHeaders)
+            .then(res => {
+              if (res.data.success) {
+                toast.success(res.data.message);
+                closeModal01();
+                if (toggle) {
+                  setToggle(0);
+                } else {
+                  setToggle(1);
+                };
+              } else {
+                toast.error(res.data.error);
+              };
+            })
+            .catch(err => {
+              toast.error(err);
+            })
         } else {
           toast.error(res.data.error);
         };
@@ -175,7 +323,7 @@ export default function Relations() {
 
   return (
     <div className="h-100" style={{ fontSize: '0.8rem' }}>
-      <div className="row justify-content-center align-items-center h-100">
+      <div className="row justify-content-center align-items-center h-100  overflow-auto">
         <div className="text-center fs-1 text-warning">{person}</div>
         {/* /////////////SPOUSE CARD//////////////////// */}
         <div className="card w-25">
@@ -183,7 +331,7 @@ export default function Relations() {
           <div className="cardContent">{spouse[2]}</div>
           <div className="cardFooter">
             {spouse[0] ? (
-              <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(spouse[0]) }}>Remove</button>
+              <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(3, spouse[1], spouse[3]) }}>Remove</button>
             ) : (
               <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(3) }}>add</button>
             )}
@@ -198,7 +346,7 @@ export default function Relations() {
               <div className="cardContent">{father[2]}</div>
               <div className="cardFooter">
                 {father[0] ? (
-                  <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(father[0]) }}>Remove</button>
+                  <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(3, father[1], father[3]) }}>Remove</button>
                 ) : (
                   <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(1) }}>add</button>
                 )}
@@ -210,7 +358,7 @@ export default function Relations() {
               <div className="cardContent">{mother[2]}</div>
               <div className="cardFooter">
                 {mother[0] ? (
-                  <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(mother[0]) }}>Remove</button>
+                  <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(3, mother[1], mother[3]) }}>Remove</button>
                 ) : (
                   <button className="btn btn-outline-success btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { addRelation(2) }}>add</button>
                 )}
@@ -228,7 +376,7 @@ export default function Relations() {
                     <tr>
                       <td>{son[2]}</td>
                       <td className="text-end" style={{ textAlign: 'right' }}>
-                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(son[0]) }}>Remove</button>
+                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(3, son[1], son[3]) }}>Remove</button>
                       </td>
                     </tr>
                   ))}
@@ -247,7 +395,7 @@ export default function Relations() {
                     <tr>
                       <td>{daughter[2]}</td>
                       <td className="text-end" style={{ textAlign: 'right' }}>
-                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(daughter[0]) }}>Remove</button>
+                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(3, daughter[1], daughter[3]) }}>Remove</button>
                       </td>
                     </tr>
                   ))}
@@ -269,7 +417,7 @@ export default function Relations() {
                     <tr>
                       <td>{brother[2]}</td>
                       <td className="text-end" style={{ textAlign: 'right' }}>
-                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(brother[0]) }}>Remove</button>
+                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(3, brother[1], brother[3]) }}>Remove</button>
                       </td>
                     </tr>
                   ))}
@@ -288,7 +436,7 @@ export default function Relations() {
                     <tr>
                       <td>{sister[2]}</td>
                       <td className="text-end" style={{ textAlign: 'right' }}>
-                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(sister[0]) }}>Remove</button>
+                        <button className="btn btn-outline-danger btn-sm fw-bold" style={{ fontSize: '12px' }} onClick={() => { removeRelation(3, sister[1], sister[3]) }}>Remove</button>
                       </td>
                     </tr>
                   ))}

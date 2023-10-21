@@ -15,6 +15,7 @@ export default function NewPerson() {
 
   const [person, setPerson] = useState({
     name: null,
+    gender: null,
     dob: null,
     dod: null
   });
@@ -30,7 +31,7 @@ export default function NewPerson() {
           toast.success(res.data.message);
           // navigate('/login');
         } else {
-          if(res.data.error.errno === 1062){
+          if (res.data.error.errno === 1062) {
             toast.error("Name already exists, Cannot add duplicate names")
             return;
           } else {
@@ -42,10 +43,12 @@ export default function NewPerson() {
         } else {
           setPerson({
             name: null,
+            gender: null,
             dob: null,
             dod: null
           });
           document.getElementById("name").value = "";
+          document.getElementById("gender").value = 0;
           document.getElementById("dob").value = "";
           document.getElementById("dod").value = "";
         };
@@ -65,8 +68,17 @@ export default function NewPerson() {
       toast.error("Username should atleast be three chacters long");
       return false;
     }
+    if (person.gender === '' || person.gender === null) {
+      toast.error("Please select the gender");
+      return false;
+    };
     return true;
   };
+
+  const onChangeSelect = (event) => {
+    const value = event.target.value;
+    setPerson({...person, gender:value});
+  }; 
 
   return (
     <div>
@@ -79,6 +91,12 @@ export default function NewPerson() {
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">Name<span className="text-warning ps-1">*</span></label>
                   <input type="text" className="form-control mb-3" value={person.name} id="name" onChange={(e) => setPerson({ ...person, name: e.target.value })} />
+                  <label htmlFor="gender" className="form-label">Gender<span className="text-warning ps-1">*</span></label>
+                  <select id="gender" className="form-select mb-3" aria-label="Default select example" onChange={onChangeSelect}>
+                    <option value="" selected>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>                  
                   <label htmlFor="dob" className="form-label">Date of Birth</label>
                   <input type="date" className="form-control mb-3" value={person.dob} id="dob" onChange={(e) => setPerson({ ...person, dob: e.target.value })} />
                   <label htmlFor="dod" className="form-label">Date of Death</label>

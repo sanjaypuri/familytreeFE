@@ -73,9 +73,10 @@ export default function ListPersons() {
     }
   };
 
-  const showPerson  = (id, person) => {
+  const showPerson  = (id, person, gender) => {
     sessionStorage.setItem("ftbyspid", id);
     sessionStorage.setItem("ftbyspperson", person); 
+    sessionStorage.setItem("ftbyspgender", gender);
     navigate('/relations');
   };
 
@@ -96,6 +97,7 @@ export default function ListPersons() {
           <thead>
             <tr>
               <th scope="col">Name</th>
+              <th scope="col">Gender</th>
               <th scope="col">Born on</th>
               <th scope="col">Married on</th>
               <th scope="col">Died on</th>
@@ -106,10 +108,11 @@ export default function ListPersons() {
             {persons.map((person) => (
               <tr>
                 <td scope="row">{person.name}</td>
+                <td scope="row">{person.gender}</td>
                 <td>{!person.dob ? "" : toDateString(person.dob)}</td>
                 <td>{!person.dom ? "" : toDateString(person.dom)}</td>
                 <td>{!person.dod ? "" : toDateString(person.dod)}</td>
-                <td><button className="btn btn-sm btn-outline-warning" onClick={() => {showPerson(person.id, person.name)}}>Add/Modify</button></td>
+                <td><button className="btn btn-sm btn-outline-warning" onClick={() => {showPerson(person.id, person.name, person.gender)}}>Add/Modify</button></td>
               </tr>
             ))}
           </tbody>
